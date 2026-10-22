@@ -1,0 +1,189 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  CASH_ON_DELIVERY
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum StockMovementReason {
+  INITIAL_STOCK
+  RESTOCK
+  MANUAL_ADJUSTMENT
+  ORDER_PLACED
+  ORDER_CANCELLED
+}
+
+model User {
+  id              Int        @id @default(autoincrement())
+  name            String
+  email           String     @unique
+  passwordHash    String
+  role            Role       @default(CUSTOMER)
+  shippingName    String?
+  shippingPhone   String?
+  shippingAddress String?
+  createdAt       DateTime   @default(now())
+  orders          Order[]
+  reviews         Review[]
+  favorites       Favorite[]
+  auditLogs       AuditLog[]
+}
+
+model Product {
+  id             Int             @id @default(autoincrement())
+  name           String
+  description    String?
+  price          Decimal         @db.Decimal(10, 2)
+  stock          Int             @default(0)
+  imageUrl       String?
+  categoryId     Int?
+  category       Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  createdAt      DateTime        @default(now())
+  orderItems     OrderItem[]
+  reviews        Review[]
+  favorites      Favorite[]
+  stockMovements StockMovement[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  products  Product[]
+}
+
+model Order {
+  id              Int             @id @default(autoincrement())
+  userId          Int
+  status          OrderStatus     @default(PENDING)
+  paymentMethod   PaymentMethod
+  paymentStatus   PaymentStatus   @default(PENDING)
+  shippingName    String
+  shippingPhone   String
+  shippingAddress String
+  shippingCarrier String?
+  trackingNumber  String?
+  shippedAt       DateTime?
+  notes           String?
+  subtotal        Decimal         @db.Decimal(14, 2)
+  shippingFee     Decimal         @db.Decimal(14, 2)
+  total           Decimal         @db.Decimal(14, 2)
+  idempotencyKey  String?
+  requestHash     String?         @db.Char(64)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  user            User            @relation(fields: [userId], references: [id], onDelete: Restrict)
+  items           OrderItem[]
+  stockMovements  StockMovement[]
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@index([trackingNumber])
+  @@unique([userId, idempotencyKey])
+}
+
+model OrderItem {
+  id          Int      @id @default(autoincrement())
+  orderId     Int
+  productId   Int?
+  productName String
+  unitPrice   Decimal  @db.Decimal(10, 2)
+  quantity    Int
+  lineTotal   Decimal  @db.Decimal(14, 2)
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([productId, createdAt])
+}
+
+model Favorite {
+  userId    Int
+  productId Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([userId, productId])
+  @@index([productId])
+}
+
+model StockMovement {
+  id          Int                 @id @default(autoincrement())
+  productId   Int?
+  productName String
+  orderId     Int?
+  delta       Int
+  stockAfter  Int
+  reason      StockMovementReason
+  createdAt   DateTime            @default(now())
+  product     Product?            @relation(fields: [productId], references: [id], onDelete: SetNull)
+  order       Order?              @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([productId, createdAt])
+  @@index([orderId])
+}
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  actorUserId Int?
+  action      String
+  entityType  String
+  entityId    Int
+  before      Json?
+  after       Json?
+  createdAt   DateTime @default(now())
+  actor       User?    @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId, createdAt])
+  @@index([actorUserId, createdAt])
+}

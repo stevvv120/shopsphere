@@ -1,0 +1,3 @@
+-- No-op migration: the stock movement tables were already created in
+-- 20261020233000_add_stock_movements.
+-- This placeholder keeps Prisma's migration history consistent.

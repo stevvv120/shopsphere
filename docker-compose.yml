@@ -1,0 +1,66 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: shopsphere
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Isi POSTGRES_PASSWORD di .env}
+      POSTGRES_DB: shopsphere
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shopsphere -d shopsphere"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    build:
+      context: .
+      target: build
+    command: npx prisma migrate deploy
+    restart: "no"
+    environment:
+      DATABASE_URL: "postgresql://shopsphere:${POSTGRES_PASSWORD}@db:5432/shopsphere?schema=public"
+      ADMIN_NAME: ${ADMIN_NAME:-}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    build:
+      context: .
+      target: runtime
+    restart: unless-stopped
+    # Hanya bisa diakses dari komputer ini. Ganti ke "3001:3001" jika ingin dibuka ke jaringan.
+    ports:
+      - "127.0.0.1:3001:3001"
+    environment:
+      DATABASE_URL: "postgresql://shopsphere:${POSTGRES_PASSWORD}@db:5432/shopsphere?schema=public"
+      JWT_SECRET: ${JWT_SECRET:?Isi JWT_SECRET (minimal 32 byte) di .env}
+      SHIPPING_FEE: ${SHIPPING_FEE:-0}
+      BANK_TRANSFER_BANK_NAME: ${BANK_TRANSFER_BANK_NAME:-}
+      BANK_TRANSFER_ACCOUNT_NAME: ${BANK_TRANSFER_ACCOUNT_NAME:-}
+      BANK_TRANSFER_ACCOUNT_NUMBER: ${BANK_TRANSFER_ACCOUNT_NUMBER:-}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173,http://127.0.0.1:5173}
+      TRUST_PROXY: ${TRUST_PROXY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3001/api/v1/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  pgdata:

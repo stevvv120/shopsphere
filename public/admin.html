@@ -1,0 +1,189 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f6f7f3" />
+    <meta name="description" content="Kelola katalog, pesanan, pembayaran, dan ulasan ShopSphere." />
+    <title>Admin ShopSphere</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+    <link rel="stylesheet" href="/admin.css"/>
+    <link rel="stylesheet" href="/admin-overview.css?v=20261021-02"/>
+    <link rel="stylesheet" href="/admin-polish.css?v=2"/>
+    <script src="/admin.js?v=20261021-02" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Lewati ke konten</a>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="ShopSphere, buka toko">
+          <svg class="brand-logo" viewBox="0 0 48 48" width="38" height="38" aria-hidden="true">
+              <rect width="48" height="48" rx="14" fill="#23483a"/>
+              <path d="M14 19h20l-1.6 15a2 2 0 0 1-2 1.8H17.6a2 2 0 0 1-2-1.8L14 19Z" fill="#f6f7f3"/>
+              <path d="M19 19v-2a5 5 0 0 1 10 0v2" stroke="#c6df77" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+              <circle cx="24" cy="27" r="4.2" fill="#23483a"/>
+              <ellipse cx="24" cy="27" rx="8.5" ry="2.7" transform="rotate(-22 24 27)" stroke="#c6df77" stroke-width="1.7" fill="none"/>
+          </svg>
+          <span class="brand-name">shop<span>sphere</span></span>
+          <span class="brand-tag">admin</span>
+      </a>
+      <div class="topbar-right">
+        <a class="store-link" href="/">Lihat toko <span aria-hidden="true">↗</span></a>
+        <span class="admin-badge"><span></span> Admin</span>
+      </div>
+    </header>
+
+    <main id="mainContent" class="page-shell">
+      <section class="login-view" id="loginView" aria-labelledby="loginTitle">
+        <div class="login-art" aria-hidden="true">
+          <div class="art-circle circle-one"></div><div class="art-circle circle-two"></div>
+          <div class="art-box"><span></span><i></i></div>
+          <p>Ruang kendali<br /><strong>ShopSphere</strong></p>
+        </div>
+        <div class="login-card">
+          <p class="eyebrow">Area khusus admin</p>
+          <h1 id="loginTitle">Selamat datang<br />kembali.</h1>
+          <p class="login-copy">Masuk untuk mengelola katalog, pesanan, pembayaran, dan ulasan tokomu.</p>
+          <form id="loginForm" class="form-stack">
+            <label>Email admin<input name="email" type="email" autocomplete="username" placeholder="admin@tokomu.com" required /></label>
+            <label>Kata sandi<input name="password" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi" required /></label>
+            <p class="form-message" id="loginMessage" role="alert" hidden></p>
+            <button class="button button-primary" type="submit"><span>Masuk ke dashboard</span><span aria-hidden="true">→</span></button>
+          </form>
+          <p class="login-hint">Gunakan email dan kata sandi admin dari konfigurasi proyekmu.</p>
+        </div>
+      </section>
+
+      <section class="dashboard-view" id="dashboardView" hidden>
+        <aside class="sidebar" aria-label="Menu dashboard">
+          <p class="side-label">MENU UTAMA</p>
+          <button class="side-link active" type="button" data-view="overview"><span class="side-icon" aria-hidden="true">&#8962;</span>Ringkasan</button>
+          <button class="side-link" type="button" data-view="products"><span class="side-icon" aria-hidden="true">&#9638;</span>Produk<b class="side-badge warn" data-badge="products" hidden>0</b></button>
+          <button class="side-link" type="button" data-view="categories"><span class="side-icon" aria-hidden="true">&#9707;</span>Kategori</button>
+          <button class="side-link" type="button" data-view="orders"><span class="side-icon" aria-hidden="true">&#9636;</span>Pesanan<b class="side-badge" data-badge="orders" hidden>0</b></button>
+          <button class="side-link" type="button" data-view="customers"><span class="side-icon" aria-hidden="true">&#9673;</span>Pelanggan</button>
+          <button class="side-link" type="button" data-view="reviews"><span class="side-icon" aria-hidden="true">&#9734;</span>Ulasan</button>
+          <button class="side-link" type="button" data-view="audit"><span class="side-icon" aria-hidden="true">&#8801;</span>Log aktivitas</button>
+          <div class="sidebar-bottom">
+            <div class="profile-avatar" id="profileAvatar">A</div>
+            <div class="profile-copy"><strong id="profileName">Admin</strong><small id="profileEmail"></small></div>
+            <button class="logout-button" id="logoutButton" type="button" aria-label="Keluar" title="Keluar">↪</button>
+          </div>
+        </aside>
+
+        <div class="dashboard-main">
+          <div class="welcome-row">
+            <div><p class="eyebrow" id="pageEyebrow">RINGKASAN TOKO</p><h1 id="pageTitle">Produk</h1><p class="page-description" id="pageDescription">Atur koleksi yang tampil di toko ShopSphere.</p></div>
+            <div class="welcome-actions"><button class="button button-secondary export-button" id="exportButton" type="button" title="Unduh data yang sedang ditampilkan sebagai CSV"><span aria-hidden="true">↓</span><span>Ekspor CSV</span></button><button class="button button-primary create-button" id="createButton" type="button"><span aria-hidden="true">＋</span><span id="createButtonLabel">Tambah produk</span></button></div>
+          </div>
+
+          <div class="notice" id="dashboardNotice" role="status" hidden></div>
+          <div class="stats-grid" id="statsGrid">
+            <article class="stat-card"><span class="stat-icon icon-green" aria-hidden="true">▦</span><div><p id="statPrimaryLabel">Total produk</p><strong id="totalProducts">—</strong><small id="statPrimaryHint">Produk terdaftar di toko</small></div></article>
+            <article class="stat-card"><span class="stat-icon icon-yellow" aria-hidden="true">◫</span><div><p id="statSecondaryLabel">Kategori</p><strong id="totalCategories">—</strong><small id="statSecondaryHint">Kelompok produk aktif</small></div></article>
+            <article class="stat-card"><span id="statTertiaryIcon" class="stat-icon icon-red" aria-hidden="true">!</span><div><p id="statTertiaryLabel">Stok menipis</p><strong id="lowStock">—</strong><small id="statTertiaryHint">Produk dengan stok 5 atau kurang</small></div></article>
+          </div>
+
+          <section class="overview-panel" id="overviewPanel" aria-label="Ringkasan operasional toko" hidden>
+            <section class="content-card overview-actions-card" aria-labelledby="overviewActionsTitle">
+              <div class="overview-section-heading"><div><p class="eyebrow">TINDAKAN HARI INI</p><h2 id="overviewActionsTitle">Yang perlu ditangani</h2></div><span class="overview-updated" id="overviewUpdated"></span></div>
+              <div class="overview-action-grid">
+                <button class="overview-action" type="button" data-overview-target="orders" data-overview-filter="PENDING"><span class="overview-action-icon icon-yellow" aria-hidden="true">!</span><span><strong>Pesanan baru</strong><small>Periksa pesanan yang menunggu diproses</small></span><b id="overviewPendingOrders">0</b><span class="overview-arrow" aria-hidden="true">›</span></button>
+                <button class="overview-action" type="button" data-overview-target="orders" data-overview-filter="PROCESSING"><span class="overview-action-icon icon-green" aria-hidden="true">→</span><span><strong>Siapkan pengiriman</strong><small>Pesanan diproses yang perlu disiapkan</small></span><b id="overviewProcessingOrders">0</b><span class="overview-arrow" aria-hidden="true">›</span></button>
+                <button class="overview-action" type="button" data-overview-target="products" data-overview-filter="LOW"><span class="overview-action-icon icon-yellow" aria-hidden="true">↓</span><span><strong>Stok menipis</strong><small>Produk dengan sisa stok 1–5 unit</small></span><b id="overviewLowStock">0</b><span class="overview-arrow" aria-hidden="true">›</span></button>
+                <button class="overview-action" type="button" data-overview-target="products" data-overview-filter="OUT"><span class="overview-action-icon icon-red" aria-hidden="true">!</span><span><strong>Stok habis</strong><small>Produk yang perlu diisi ulang</small></span><b id="overviewOutOfStock">0</b><span class="overview-arrow" aria-hidden="true">›</span></button>
+              </div>
+            </section>
+            <section class="content-card overview-recent-card" aria-labelledby="overviewRecentTitle">
+              <div class="overview-section-heading"><div><p class="eyebrow">AKTIVITAS TERBARU</p><h2 id="overviewRecentTitle">Pesanan terbaru</h2></div><button class="overview-text-button" type="button" data-overview-target="orders">Lihat semua <span aria-hidden="true">›</span></button></div>
+              <div class="overview-recent-list" id="overviewRecentOrders"></div>
+            </section>
+          </section>
+
+          <section class="sales-chart-card" id="salesChartCard" aria-labelledby="salesChartTitle" hidden>
+            <div class="sales-chart-header"><div><h2 id="salesChartTitle">Pembayaran lunas 7 hari terakhir</h2><p id="salesChartSubtitle">Ringkasan total pesanan yang pembayarannya sudah dikonfirmasi.</p></div><div class="sales-chart-summary" id="salesChartSummary"><strong>Rp0</strong><small>0 pesanan lunas</small></div></div>
+            <p class="sales-chart-empty" id="salesChartEmpty" role="status" hidden>Belum ada pembayaran lunas dalam tujuh hari terakhir.</p>
+            <div class="sales-chart" id="salesChart"></div>
+          </section>
+
+          <section class="content-card top-products-card" id="topProductsCard" aria-labelledby="topProductsTitle" hidden>
+            <div class="top-products-heading"><div><h2 id="topProductsTitle">Produk terlaris</h2><p id="topProductsSubtitle">Berdasarkan pesanan yang sudah lunas.</p></div><button class="button button-secondary export-button" id="topProductsExportButton" type="button">Ekspor CSV</button></div>
+            <p class="sales-chart-empty" id="topProductsEmpty" role="status" hidden>Belum ada produk terjual lunas pada rentang ini.</p>
+            <div class="table-wrap top-products-table-wrap" id="topProductsTable"></div>
+          </section>
+
+          <section class="content-card" id="dataTableCard" aria-labelledby="tableTitle">
+            <div class="content-card-heading">
+              <div><h2 id="tableTitle">Semua produk</h2><p id="tableSubtitle">Daftar produk yang tersedia di toko.</p></div>
+              <div class="table-filters" id="tableFilters"><select class="status-select product-stock-filter" id="productStockFilter" aria-label="Filter produk berdasarkan stok" hidden><option value="ALL">Semua stok</option><option value="LOW">Menipis (1-5)</option><option value="OUT">Habis</option><option value="AVAILABLE">Aman (&gt;5)</option></select><label class="order-date-label" id="orderDateFromLabel" hidden>Dari<input class="status-select order-date-filter" id="orderDateFrom" type="date" aria-label="Tanggal pesanan mulai" /></label><label class="order-date-label" id="orderDateToLabel" hidden>Sampai<input class="status-select order-date-filter" id="orderDateTo" type="date" aria-label="Tanggal pesanan sampai" /></label><select class="status-select order-status-filter" id="orderStatusFilter" aria-label="Filter status pesanan" hidden><option value="ALL">Semua status</option><option value="PENDING">Menunggu</option><option value="PROCESSING">Diproses</option><option value="SHIPPED">Dikirim</option><option value="DELIVERED">Terkirim</option><option value="CANCELLED">Dibatalkan</option></select><select class="status-select payment-status-filter" id="paymentStatusFilter" aria-label="Filter status pembayaran" hidden><option value="ALL">Semua pembayaran</option><option value="PENDING">Belum lunas</option><option value="PAID">Lunas</option><option value="FAILED">Gagal</option><option value="REFUNDED">Dikembalikan</option></select><select class="status-select customer-segment-filter" id="customerSegmentFilter" aria-label="Filter segmen pelanggan" hidden><option value="ALL">Semua pelanggan</option><option value="REPEAT">Pelanggan berulang (2+ pesanan)</option><option value="NEW">Satu pesanan</option><option value="INACTIVE">Tidak memesan 30+ hari</option></select></div>
+              <label class="table-search"><span class="visually-hidden">Cari</span><span aria-hidden="true">⌕</span><input id="tableSearch" type="search" placeholder="Cari produk..." /></label>
+            </div>
+            <div class="table-state" id="tableState" role="status"><span class="spinner" aria-hidden="true"></span>Memuat data toko...</div>
+            <div class="table-wrap" id="tableWrap" hidden></div>
+            <nav class="table-pagination" id="tablePagination" aria-label="Navigasi halaman data" hidden><button class="action-button" id="previousPage" type="button" aria-label="Halaman sebelumnya" disabled>Sebelumnya</button><span class="page-summary" id="pageSummary"></span><button class="action-button" id="nextPage" type="button" aria-label="Halaman berikutnya">Berikutnya</button></nav>
+          </section>
+          <footer class="dashboard-footer"><span>© <span id="currentYear"></span> ShopSphere</span><span>Dashboard pengelolaan toko</span></footer>
+        </div>
+      </section>
+      <section id="printSheet" aria-label="Slip pengiriman" hidden></section>
+    </main>
+
+    <dialog class="editor-dialog" id="editorDialog" aria-labelledby="dialogTitle">
+      <form id="editorForm" class="editor-form" method="dialog">
+        <div class="dialog-heading"><div><p class="eyebrow" id="dialogEyebrow">FORMULIR</p><h2 id="dialogTitle">Tambah produk</h2></div><button class="close-button" id="closeDialog" type="button" aria-label="Tutup">×</button></div>
+        <div id="productFields" class="form-stack">
+          <label>Nama produk<input name="name" maxlength="200" required placeholder="Contoh: Tumbler minimalis" /></label>
+          <div class="field-row"><label>Harga (Rp)<input name="price" type="number" min="0" max="99999999.99" step="0.01" required placeholder="0" /></label><label>Stok<input name="stock" type="number" min="0" step="1" required value="0" /></label></div>
+          <label>URL gambar <span class="optional-label">(opsional, harus bisa diakses publik)</span><input name="imageUrl" type="url" maxlength="2048" placeholder="https://contoh.com/gambar-produk.jpg" /></label>
+          <label>Kategori<select name="categoryId"><option value="">Tanpa kategori</option></select></label>
+          <label>Deskripsi <span class="optional-label">(opsional)</span><textarea name="description" rows="4" maxlength="4000" placeholder="Ceritakan detail produk..."></textarea></label>
+        </div>
+        <div id="categoryFields" class="form-stack" hidden>
+          <label>Nama kategori<input name="categoryName" maxlength="100" required placeholder="Contoh: Peralatan rumah" /></label>
+          <label>Slug <span class="optional-label">(otomatis jika dikosongkan)</span><input name="slug" maxlength="120" pattern="[a-z0-9]+(-[a-z0-9]+)*" placeholder="peralatan-rumah" /><small>Gunakan huruf kecil, angka, dan tanda hubung.</small></label>
+        </div>
+        <p class="form-message" id="editorMessage" role="alert" hidden></p>
+        <div class="dialog-actions"><button class="button button-secondary" id="cancelDialog" type="button">Batal</button><button class="button button-primary" id="saveButton" type="submit">Simpan</button></div>
+      </form>
+    </dialog>
+    <dialog class="editor-dialog customer-history-dialog" id="customerHistoryDialog" aria-labelledby="customerHistoryTitle">
+      <div class="editor-form">
+        <div class="dialog-heading"><div><p class="eyebrow">RIWAYAT TRANSAKSI</p><h2 id="customerHistoryTitle">Riwayat pelanggan</h2><small id="customerHistorySubtitle"></small></div><button class="close-button" id="closeCustomerHistory" type="button" aria-label="Tutup">&#215;</button></div>
+        <div id="customerHistoryContent"></div>
+        <div class="dialog-actions"><button class="button button-secondary" id="closeCustomerHistoryFooter" type="button">Tutup</button><button class="button button-primary" id="viewCustomerOrders" type="button">Lihat pesanan</button></div>
+      </div>
+    </dialog>
+    <dialog class="editor-dialog" id="shippingDialog" aria-labelledby="shippingDialogTitle">
+      <form id="shippingForm" class="editor-form" method="dialog">
+        <input type="hidden" name="orderId" />
+        <div class="dialog-heading"><div><p class="eyebrow">PENGIRIMAN</p><h2 id="shippingDialogTitle">Kirim pesanan</h2><small id="shippingOrderLabel"></small></div><button class="close-button" id="closeShippingDialog" type="button" aria-label="Tutup">×</button></div>
+        <div class="form-stack">
+          <label>Kurir<input name="carrier" maxlength="80" required placeholder="Contoh: JNE, J&amp;T, SiCepat" /></label>
+          <label>Nomor resi<input name="trackingNumber" maxlength="120" required placeholder="Masukkan nomor resi" /></label>
+        </div>
+        <p class="form-message" id="shippingMessage" role="alert" hidden></p>
+        <div class="dialog-actions"><button class="button button-secondary" id="cancelShipping" type="button">Batal</button><button class="button button-primary" id="saveShippingButton" type="submit">Simpan &amp; tandai dikirim</button></div>
+      </form>
+    </dialog>
+    <dialog class="editor-dialog" id="restockDialog" aria-labelledby="restockDialogTitle">
+      <form id="restockForm" class="editor-form" method="dialog">
+        <input type="hidden" name="productId" />
+        <div class="dialog-heading"><div><p class="eyebrow">PERSEDIAAN TOKO</p><h2 id="restockDialogTitle">Tambah stok</h2><small id="restockProductLabel"></small></div><button class="close-button" id="closeRestockDialog" type="button" aria-label="Tutup">×</button></div>
+        <div class="form-stack">
+          <label>Jumlah unit yang ditambahkan<input name="quantity" type="number" min="1" max="1000000" step="1" required value="1" /></label>
+          <small id="restockCurrentStock"></small>
+        </div>
+        <p class="form-message" id="restockMessage" role="alert" hidden></p>
+        <div class="dialog-actions"><button class="button button-secondary" id="cancelRestock" type="button">Batal</button><button class="button button-primary" id="saveRestockButton" type="submit">Tambah stok</button></div>
+      </form>
+    </dialog>
+    <dialog class="editor-dialog stock-history-dialog" id="stockHistoryDialog" aria-labelledby="stockHistoryTitle">
+      <div class="editor-form">
+        <div class="dialog-heading"><div><p class="eyebrow">PERSEDIAAN TOKO</p><h2 id="stockHistoryTitle">Riwayat stok</h2><small id="stockHistoryProduct"></small></div><button class="close-button" id="closeStockHistory" type="button" aria-label="Tutup">×</button></div>
+        <div id="stockHistoryContent" class="stock-history-content" aria-live="polite"></div>
+        <div class="dialog-actions"><button class="button button-secondary" id="exportStockHistoryButton" type="button" disabled>Ekspor CSV</button><button class="button button-secondary" id="closeStockHistoryFooter" type="button">Tutup</button></div>
+      </div>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
+

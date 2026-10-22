@@ -1,0 +1,12 @@
+{
+  "rootDir": "..",
+  "testEnvironment": "node",
+  "testRegex": "test/.*\\.e2e-spec\\.ts$",
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "transform": {
+    "^.+\\.[tj]s$": ["ts-jest", { "tsconfig": "tsconfig.e2e.json" }]
+  },
+  "transformIgnorePatterns": ["/node_modules/(?!@nestjs/jwt/)"],
+  "setupFiles": ["<rootDir>/test/setup-env.ts"],
+  "testTimeout": 30000
+}

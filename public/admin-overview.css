@@ -1,0 +1,271 @@
+.overview-panel {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.overview-panel .content-card {
+  padding: 20px;
+}
+
+.overview-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.overview-section-heading .eyebrow {
+  margin-bottom: 6px;
+}
+
+.overview-section-heading h2 {
+  margin: 0;
+  color: #344238;
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: -.025em;
+}
+
+.overview-updated {
+  color: #929c94;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.overview-action-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.overview-action {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 34px minmax(0, 1fr) auto 10px;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 12px;
+  border: 1px solid #edf0eb;
+  border-radius: 10px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .18s, background .18s, transform .18s;
+}
+
+.overview-action:hover {
+  transform: translateY(-1px);
+  border-color: #d4dfcf;
+  background: #fbfcfa;
+}
+
+.overview-action:focus-visible,
+.overview-order:focus-visible,
+.overview-text-button:focus-visible {
+  outline: 3px solid rgba(92, 134, 92, .25);
+  outline-offset: 2px;
+}
+
+.overview-action-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 9px;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.overview-action>span:nth-child(2) {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.overview-action strong {
+  overflow: hidden;
+  color: #405046;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overview-action small {
+  color: #929c94;
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+.overview-action>b {
+  color: #33483a;
+  font-size: 19px;
+}
+
+.overview-arrow {
+  color: #9aa59b;
+  font-size: 19px;
+  line-height: 1;
+}
+
+.overview-text-button {
+  padding: 6px 0 6px 8px;
+  border: 0;
+  background: transparent;
+  color: #557357;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.overview-recent-list {
+  display: grid;
+}
+
+.overview-order {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 48px minmax(0, 1fr) 100px 120px 12px;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 4px;
+  border: 0;
+  border-top: 1px solid #f0f2ee;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.overview-order:first-child {
+  border-top: 0;
+}
+
+.overview-order:hover .overview-order-id,
+.overview-order:hover .overview-order-customer strong {
+  color: #52764e;
+}
+
+.overview-order-id {
+  color: #66756a;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.overview-order-customer {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.overview-order-customer strong {
+  overflow: hidden;
+  color: #405046;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overview-order-customer small {
+  color: #9aa39c;
+  font-size: 8px;
+}
+
+.overview-order .stock-pill {
+  justify-self: start;
+  font-size: 8px;
+}
+
+.overview-order-total {
+  color: #405046;
+  font-size: 10px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.overview-empty {
+  margin: 0;
+  padding: 18px 4px 4px;
+  border-top: 1px solid #f0f2ee;
+  color: #8a948c;
+  font-size: 10px;
+}
+
+@media (max-width: 1000px) {
+  .overview-action-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .sidebar {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .side-link {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .overview-panel {
+    gap: 12px;
+    margin-bottom: 17px;
+  }
+
+  .overview-panel .content-card {
+    padding: 15px;
+  }
+
+  .overview-section-heading {
+    margin-bottom: 12px;
+  }
+
+  .overview-section-heading h2 {
+    font-size: 13px;
+  }
+
+  .overview-action {
+    grid-template-columns: 30px minmax(0, 1fr) auto 8px;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .overview-action-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .overview-action strong {
+    font-size: 9px;
+  }
+
+  .overview-order {
+    grid-template-columns: 38px minmax(0, 1fr) max-content;
+    gap: 5px 9px;
+    padding: 10px 2px;
+  }
+
+  .overview-order-id {
+    grid-row: span 2;
+  }
+
+  .overview-order .stock-pill {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .overview-order-total {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .overview-order>.overview-arrow {
+    display: none;
+  }
+}

@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Temukan pilihan produk sehari-hari di ShopSphere."
+    />
+    <meta name="theme-color" content="#f6f7f3" />
+    <title>ShopSphere — Pilihan baik untuk setiap hari</title>
+    <link rel="stylesheet" href="/styles.css?v=20261021-03" />
+    <script src="/app.js?v=20261021-03" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#catalog">Langsung ke katalog</a>
+
+    <div class="announcement">
+      <span class="announcement-dot" aria-hidden="true"></span>
+      Temukan produk dengan mudah
+      <span class="announcement-separator" aria-hidden="true">·</span>
+      Simpan pilihan favoritmu
+    </div>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="ShopSphere, halaman utama">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" role="presentation">
+              <path d="M8 12.5h24l-2 20H10l-2-20Z" />
+              <path d="M14 14V10a6 6 0 0 1 12 0v4" />
+              <path d="m15.5 23 3 3 6-7" />
+            </svg>
+          </span>
+          <span class="brand-name">shop<span>sphere</span></span>
+        </a>
+
+        <nav class="desktop-nav" aria-label="Navigasi utama">
+          <a class="nav-link active" href="#catalog">Belanja</a>
+          <a class="nav-link" href="#about">Tentang kami</a>
+        </nav>
+
+        <form class="header-search" id="searchForm" role="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.8" cy="10.8" r="6.8" />
+            <path d="m16 16 4.5 4.5" />
+          </svg>
+          <label class="visually-hidden" for="searchInput">Cari produk</label>
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Cari yang kamu butuhkan"
+            autocomplete="off"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded="false"
+            aria-controls="searchSuggestions"
+            aria-activedescendant=""
+          />
+          <kbd>⌘ K</kbd>
+          <div class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="Saran produk" hidden></div>
+        </form>
+
+        <button class="orders-trigger" id="customerOrdersTrigger" type="button" aria-label="Lihat pesanan saya">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 4.5h14v15H5z" />
+            <path d="M8 8h8M8 12h8M8 16h5" />
+          </svg>
+          <span class="orders-label">Pesanan</span>
+        </button>
+
+        <button class="cart-trigger" id="cartTrigger" type="button" aria-label="Buka keranjang">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3.5 4.5h2l2.1 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 1.9-1.5l1.3-6.3H7" />
+            <circle cx="10" cy="20" r="1.2" />
+            <circle cx="17" cy="20" r="1.2" />
+          </svg>
+          <span class="cart-label">Keranjang</span>
+          <span class="cart-count" id="cartCount" aria-live="polite">0</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero page-shell" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> Temukan yang kamu butuhkan</p>
+          <h1 id="heroTitle">Pilihan sehari-hari,<br /><em>lebih mudah ditemukan.</em></h1>
+          <p class="hero-description">
+            Jelajahi koleksi, bandingkan pilihan, lalu simpan produk favoritmu.
+            Semua yang kamu perlukan untuk belanja dengan lebih praktis.
+          </p>
+          <a class="button button-dark" href="#catalog">
+            Lihat semua produk
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+          </a>
+          <div class="hero-note" aria-label="Fitur belanja">
+            <span class="hero-note-icon" aria-hidden="true">✓</span>
+            <span><strong>Belanja lebih terarah</strong><br />Cari, filter, dan cek ketersediaan produk</span>
+          </div>
+        </div>
+
+        <div class="hero-art" aria-label="Ilustrasi produk pilihan ShopSphere" role="img">
+          <div class="hero-art-orbit orbit-one"></div>
+          <div class="hero-art-orbit orbit-two"></div>
+          <div class="hero-sun"></div>
+          <div class="hero-platform platform-back"></div>
+          <div class="hero-platform platform-front"></div>
+          <div class="hero-vase">
+            <div class="vase-neck"></div>
+            <div class="vase-body"><span></span></div>
+          </div>
+          <div class="hero-leaf leaf-one"></div>
+          <div class="hero-leaf leaf-two"></div>
+          <div class="hero-leaf leaf-three"></div>
+          <div class="hero-art-card">
+            <span class="art-card-icon">✳</span>
+            <span><small>Kurasi ShopSphere</small><strong>Simple things.<br />Better days.</strong></span>
+          </div>
+          <span class="hero-art-caption">PILIHAN YANG TERASA PAS</span>
+        </div>
+
+        <div class="hero-index" aria-hidden="true"><span>01</span><i></i><span>03</span></div>
+      </section>
+
+      <section class="benefits page-shell" aria-label="Fitur belanja ShopSphere">
+        <div class="benefit-item">
+          <span class="benefit-icon icon-spark">✦</span>
+          <span><strong>Pilih dengan leluasa</strong><small>Bandingkan produk dalam satu katalog</small></span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon icon-leaf">⌁</span>
+          <span><strong>Info produk jelas</strong><small>Lihat harga dan ketersediaan stok</small></span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon icon-heart">♡</span>
+          <span><strong>Simpan yang disuka</strong><small>Akses kembali produk favoritmu</small></span>
+        </div>
+      </section>
+
+      <section class="home-categories page-shell" id="homeCategoriesSection" aria-labelledby="homeCategoriesTitle" hidden>
+        <div class="home-section-heading">
+          <div>
+            <p class="eyebrow eyebrow-muted">Mulai dari kategori</p>
+            <h2 id="homeCategoriesTitle">Cari yang kamu perlukan<span>.</span></h2>
+          </div>
+          <a class="home-section-link" href="#catalog">Lihat semua produk <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="home-category-grid" id="homeCategoryGrid"></div>
+      </section>
+
+      <section class="catalog page-shell" id="catalog" aria-labelledby="catalogTitle">
+        <div class="catalog-heading">
+          <div>
+            <p class="eyebrow eyebrow-muted">Jelajahi ShopSphere</p>
+            <h2 id="catalogTitle">Jelajahi semua produk<span>.</span></h2>
+            <p class="catalog-subtitle">Gunakan kategori dan filter untuk menemukan pilihan yang paling sesuai.</p>
+          </div>
+          <label class="sort-control" for="sortSelect">
+            <span>Urutkan</span>
+            <select id="sortSelect">
+              <option value="featured">Pilihan kami</option>
+              <option value="price-low">Harga terendah</option>
+              <option value="price-high">Harga tertinggi</option>
+              <option value="name">Nama produk</option>
+              <option value="rating">Rating tertinggi</option>
+              <option value="newest">Produk terbaru</option>
+            </select>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7 5 5 5-5" /></svg>
+          </label>
+        </div>
+
+        <div class="catalog-toolbar">
+          <div class="category-filters" id="categoryFilters" aria-label="Filter kategori"></div>
+          <div class="catalog-toolbar-end">
+            <button class="filter-chip favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">Favorit <span class="filter-chip-count" data-favorite-count>0</span></button>
+            <p class="result-count" id="resultCount" aria-live="polite"></p>
+          </div>
+        </div>
+        <div class="catalog-refinements" aria-label="Filter katalog">
+          <label class="price-filter">Harga minimum
+            <span>Rp <input id="minPriceFilter" type="number" min="0" step="1000" inputmode="numeric" placeholder="0" aria-label="Harga minimum" /></span>
+          </label>
+          <label class="price-filter">Harga maksimum
+            <span>Rp <input id="maxPriceFilter" type="number" min="0" step="1000" inputmode="numeric" placeholder="Tanpa batas" aria-label="Harga maksimum" /></span>
+          </label>
+          <label class="stock-filter"><input id="availableOnlyFilter" type="checkbox" /> Hanya yang tersedia</label>
+          <label class="rating-filter" for="minimumRatingFilter">Rating minimum
+            <select id="minimumRatingFilter">
+              <option value="0">Semua rating</option>
+              <option value="4">4 bintang ke atas</option>
+              <option value="3">3 bintang ke atas</option>
+            </select>
+          </label>
+          <button class="clear-catalog-filters" id="clearCatalogFilters" type="button" hidden>Hapus semua filter</button>
+        </div>
+
+        <div class="catalog-state" id="catalogState" role="status">
+          <span class="loading-spinner" aria-hidden="true"></span>
+          <span>Memuat koleksi pilihan...</span>
+        </div>
+        <div class="product-grid" id="productGrid" aria-live="polite"></div>
+        <section id="compareSection" class="compare-section" hidden>
+          <div class="compare-header">
+            <div>
+              <p class="eyebrow">PRODUCT COMPARISON</p>
+              <h2>Bandingkan Produk</h2>
+              <p>Pilih produk untuk membandingkan harga, kategori, dan stok.</p>
+            </div>
+
+            <button id="clearCompare" type="button" class="compare-clear">
+              Hapus Semua
+            </button>
+          </div>
+
+          <div id="compareContent" class="compare-content"></div>
+        </section>
+        <nav class="catalog-pagination" id="catalogPagination" aria-label="Halaman katalog" hidden></nav>
+      </section>
+
+      <section class="recent-products page-shell" id="recentProductsSection" aria-labelledby="recentProductsTitle" hidden>
+        <div class="recent-products-heading">
+          <div>
+            <p class="eyebrow eyebrow-muted">Lanjutkan jelajahmu</p>
+            <h2 id="recentProductsTitle">Terakhir kamu lihat<span>.</span></h2>
+          </div>
+          <button class="recent-products-clear" id="clearRecentProducts" type="button">Hapus riwayat</button>
+        </div>
+        <div class="recent-products-list" id="recentProductsList"></div>
+      </section>
+
+      <section class="about-band page-shell" id="about">
+        <div class="about-mark" aria-hidden="true">S.</div>
+        <div>
+          <p class="eyebrow eyebrow-light">Ruang untuk hal-hal baik</p>
+          <h2>Belanja yang terasa<br /><em>lebih seperti kamu.</em></h2>
+        </div>
+        <p class="about-copy">
+          ShopSphere membantu kamu menemukan pilihan yang cocok untuk hidup
+          sehari-hari. Tidak berlebihan, cukup yang benar-benar kamu butuhkan.
+        </p>
+        <a class="about-link" href="#catalog" aria-label="Lihat semua produk">
+          Lihat koleksi <span aria-hidden="true">↗</span>
+        </a>
+        <div class="about-decoration" aria-hidden="true"><span></span><span></span><span></span></div>
+      </section>
+    </main>
+
+    <footer class="site-footer page-shell">
+      <a class="brand footer-brand" href="/" aria-label="ShopSphere, kembali ke atas">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" role="presentation">
+            <path d="M8 12.5h24l-2 20H10l-2-20Z" />
+            <path d="M14 14V10a6 6 0 0 1 12 0v4" />
+            <path d="m15.5 23 3 3 6-7" />
+          </svg>
+        </span>
+        <span class="brand-name">shop<span>sphere</span></span>
+      </a>
+      <p>Hal-hal baik untuk menemani harimu.</p>
+      <a class="admin-footer-link" href="/admin.html">Dashboard admin <span aria-hidden="true">↗</span></a>
+      <span class="footer-copyright">© <span id="currentYear"></span> ShopSphere</span>
+    </footer>
+
+    <div class="cart-backdrop" id="cartBackdrop" hidden></div>
+    <aside
+      class="cart-drawer"
+      id="cartDrawer"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cartTitle"
+      aria-hidden="true"
+      inert
+      tabindex="-1"
+    >
+      <div class="cart-drawer-header">
+        <div><p class="eyebrow eyebrow-muted">Pilihanmu</p><h2 id="cartTitle">Keranjang</h2></div>
+        <button class="icon-button" id="closeCart" type="button" aria-label="Tutup keranjang">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-drawer-footer" id="cartFooter">
+        <div class="cart-subtotal"><span>Subtotal produk</span><strong id="cartSubtotal">Rp0</strong></div>
+        <div class="cart-subtotal"><span>Ongkos kirim</span><strong id="cartShippingFee">Rp0</strong></div>
+        <div class="cart-subtotal cart-grand-total"><span>Total</span><strong id="cartTotal">Rp0</strong></div>
+        <p>Ongkos kirim menggunakan tarif tetap toko.</p>
+        <button class="button button-dark checkout-button" id="checkoutButton" type="button" disabled>
+          Lanjut checkout
+        </button>
+      </div>
+    </aside>
+
+    <dialog class="checkout-dialog" id="checkoutDialog" aria-labelledby="checkoutTitle">
+      <div class="checkout-dialog-inner">
+        <header class="checkout-dialog-header">
+          <div><p class="eyebrow eyebrow-muted" id="checkoutEyebrow">LANGKAH 1 DARI 2</p><h2 id="checkoutTitle">Masuk untuk checkout</h2></div>
+          <button class="icon-button" id="closeCheckout" type="button" aria-label="Tutup checkout">×</button>
+        </header>
+
+        <section id="customerAuthStep" class="checkout-step">
+          <p class="checkout-intro customer-auth-intro">Pesananmu akan tersimpan di akun supaya mudah dilacak.</p>
+          <div class="auth-mode-switch" role="group" aria-label="Pilih masuk atau daftar">
+            <button type="button" class="active" data-auth-mode="login" aria-pressed="true">Masuk</button>
+            <button type="button" data-auth-mode="register" aria-pressed="false">Daftar akun</button>
+          </div>
+          <form id="customerAuthForm" class="checkout-form">
+            <label id="customerNameField" hidden>Nama lengkap<input name="name" type="text" maxlength="100" autocomplete="name" placeholder="Nama penerima" disabled /></label>
+            <label>Email<input name="email" type="email" maxlength="254" autocomplete="email" required placeholder="nama@email.com" /></label>
+            <label>Kata sandi<input name="password" type="password" minlength="8" maxlength="72" autocomplete="current-password" required placeholder="Masukkan kata sandi akun" /><small class="auth-field-hint" id="customerPasswordHint">Gunakan kata sandi yang kamu pakai saat mendaftar.</small></label>
+            <p class="checkout-message" id="customerAuthMessage" role="alert" hidden></p>
+            <button class="button button-dark checkout-submit" id="customerAuthSubmit" type="submit">Masuk dan lanjutkan</button>
+          </form>
+        </section>
+
+        <form id="shippingForm" class="checkout-step checkout-form" hidden>
+          <p class="checkout-intro">Masuk sebagai <strong id="customerIdentity"></strong>. Isi alamat tujuan pesanan.</p>
+          <label>Nama penerima<input name="shippingName" type="text" maxlength="100" autocomplete="name" required /></label>
+          <label>Nomor telepon<input name="shippingPhone" type="tel" maxlength="30" autocomplete="tel" required placeholder="Contoh: 081234567890" /></label>
+          <label>Alamat lengkap<textarea name="shippingAddress" rows="3" maxlength="1000" autocomplete="street-address" required placeholder="Jalan, nomor rumah, kelurahan, kota, kode pos"></textarea></label>
+          <label>Metode pembayaran<select name="paymentMethod" id="paymentMethod" required><option value="BANK_TRANSFER">Transfer bank (konfirmasi manual)</option><option value="CASH_ON_DELIVERY">Bayar saat pesanan diterima (COD)</option></select></label>
+          <p class="payment-method-hint" id="paymentMethodHint"></p>
+          <label>Catatan <span class="optional-note">(opsional)</span><textarea name="notes" rows="2" maxlength="1000" placeholder="Petunjuk tambahan untuk pesanan"></textarea></label>
+          <div class="checkout-summary">
+            <div><span>Subtotal produk</span><strong id="checkoutSubtotal">Rp0</strong></div>
+            <div><span>Ongkos kirim</span><strong id="checkoutShippingFee">Rp0</strong></div>
+            <div class="checkout-total-row"><span>Total</span><strong id="checkoutTotal">Rp0</strong></div>
+          </div>
+          <p class="shipping-note">Ongkos kirim memakai tarif tetap untuk semua alamat tujuan.</p>
+          <p class="checkout-message" id="shippingMessage" role="alert" hidden></p>
+          <div class="checkout-actions"><button class="button button-light" id="backToCustomerAuth" type="button">Kembali</button><button class="button button-dark checkout-submit" id="placeOrderButton" type="submit">Buat pesanan</button></div>
+        </form>
+
+        <section id="orderSuccessStep" class="checkout-step order-success" hidden>
+          <span class="success-mark" aria-hidden="true">✓</span>
+          <p class="eyebrow eyebrow-muted">PESANAN TERCATAT</p>
+          <h3>Terima kasih sudah berbelanja.</h3>
+          <p id="orderSuccessCopy"></p>
+          <button class="button button-light checkout-submit" id="viewOrdersAfterCheckout" type="button">Lihat pesanan saya</button>
+          <button class="button button-dark checkout-submit" id="finishCheckout" type="button">Kembali ke toko</button>
+        </section>
+
+        <section id="orderHistoryStep" class="checkout-step order-history-step" hidden>
+          <div class="order-history-toolbar">
+            <p class="order-history-account"><span aria-hidden="true">✦</span><span>Masuk sebagai<strong id="orderHistoryIdentity"></strong></span></p>
+            <div class="order-history-account-actions">
+              <button class="text-button refresh-orders-button" id="refreshCustomerOrders" type="button" aria-label="Perbarui status dan informasi pengiriman pesanan">Perbarui</button>
+              <button class="text-button" id="editSavedAddress" type="button" aria-expanded="false" aria-controls="savedShippingForm">Alamat tersimpan</button>
+              <button class="text-button" id="customerLogout" type="button">Keluar</button>
+            </div>
+          </div>
+          <p class="order-history-intro">Pantau status, pembayaran, dan detail pesananmu di sini.</p>
+          <p class="order-refresh-status" id="orderRefreshStatus" role="status" aria-live="polite"></p>
+          <div class="order-history-filter" id="orderHistoryFilter" hidden>
+            <div class="order-filter-main">
+              <label class="visually-hidden" for="customerOrderSearch">Cari pesanan</label>
+              <input id="customerOrderSearch" type="search" maxlength="100" placeholder="Cari nomor pesanan, produk, atau penerima" autocomplete="off" />
+              <label class="visually-hidden" for="customerOrderStatusFilter">Status pesanan</label>
+              <select id="customerOrderStatusFilter">
+                <option value="ALL">Semua status</option>
+                <option value="PENDING">Menunggu diproses</option>
+                <option value="PROCESSING">Sedang disiapkan</option>
+                <option value="SHIPPED">Dalam pengiriman</option>
+                <option value="DELIVERED">Selesai</option>
+                <option value="CANCELLED">Dibatalkan</option>
+              </select>
+              <span class="order-filter-count" id="customerOrderCount" aria-live="polite"></span>
+              <button class="clear-order-filters" id="clearCustomerOrderFilters" type="button" hidden>Hapus filter</button>
+              <button class="export-customer-orders" id="exportCustomerOrders" type="button" disabled>Unduh CSV</button>
+            </div>
+            <details class="order-filter-advanced">
+              <summary>Filter lanjutan</summary>
+              <div class="order-filter-advanced-content">
+                <div class="order-filter-field">
+                  <label for="customerOrderPaymentFilter">Metode pembayaran</label>
+                  <select id="customerOrderPaymentFilter">
+                    <option value="ALL">Semua metode</option>
+                    <option value="BANK_TRANSFER">Transfer bank</option>
+                    <option value="CASH_ON_DELIVERY">COD</option>
+                  </select>
+                </div>
+                <div class="order-filter-field">
+                  <label for="customerOrderPaymentStatusFilter">Status pembayaran</label>
+                  <select id="customerOrderPaymentStatusFilter">
+                    <option value="ALL">Semua status</option>
+                    <option value="PENDING">Belum dibayar</option>
+                    <option value="PAID">Lunas</option>
+                    <option value="FAILED">Gagal</option>
+                    <option value="REFUNDED">Dikembalikan</option>
+                  </select>
+                </div>
+                <div class="order-filter-field">
+                  <label for="customerOrderSort">Urutkan</label>
+                  <select id="customerOrderSort">
+                    <option value="newest">Terbaru</option>
+                    <option value="oldest">Terlama</option>
+                  </select>
+                </div>
+                <div class="order-filter-field">
+                  <label for="customerOrderDateFrom">Dari tanggal</label>
+                  <input id="customerOrderDateFrom" type="date" aria-label="Tanggal pesanan mulai" />
+                </div>
+                <div class="order-filter-field">
+                  <label for="customerOrderDateTo">Sampai tanggal</label>
+                  <input id="customerOrderDateTo" type="date" aria-label="Tanggal pesanan akhir" />
+                </div>
+                <div class="order-date-presets" role="group" aria-label="Rentang tanggal cepat">
+                  <button type="button" data-order-date-preset="all" aria-pressed="true">Semua tanggal</button>
+                  <button type="button" data-order-date-preset="today" aria-pressed="false">Hari ini</button>
+                  <button type="button" data-order-date-preset="yesterday" aria-pressed="false">Kemarin</button>
+                  <button type="button" data-order-date-preset="month" aria-pressed="false">Bulan ini</button>
+                  <button type="button" data-order-date-preset="previous-month" aria-pressed="false">Bulan lalu</button>
+                  <button type="button" data-order-date-preset="year" aria-pressed="false">Tahun ini</button>
+                  <button type="button" data-order-date-preset="quarter" aria-pressed="false">Kuartal ini</button>
+                  <button type="button" data-order-date-preset="previous-quarter" aria-pressed="false">Kuartal lalu</button>
+                  <button type="button" data-order-date-preset="week" aria-pressed="false">Minggu ini</button>
+                  <button type="button" data-order-date-preset="previous-week" aria-pressed="false">Minggu lalu</button>
+                  <button type="button" data-order-date-preset="7" aria-pressed="false">7 hari</button>
+                  <button type="button" data-order-date-preset="30" aria-pressed="false">30 hari</button>
+                  <button type="button" data-order-date-preset="90" aria-pressed="false">90 hari</button>
+                  <button type="button" data-order-date-preset="180" aria-pressed="false">180 hari</button>
+                </div>
+              </div>
+            </details>
+          </div>
+          <form id="savedShippingForm" class="checkout-form saved-shipping-form" hidden>
+            <label>Nama penerima<input name="shippingName" type="text" maxlength="100" autocomplete="name" required /></label>
+            <label>Nomor telepon<input name="shippingPhone" type="tel" maxlength="30" autocomplete="tel" required placeholder="Contoh: 081234567890" /></label>
+            <label>Alamat lengkap<textarea name="shippingAddress" rows="3" maxlength="1000" autocomplete="street-address" required placeholder="Jalan, nomor rumah, kelurahan, kota, kode pos"></textarea></label>
+            <p class="checkout-message" id="savedShippingMessage" role="status" hidden></p>
+            <button class="button button-dark checkout-submit" id="saveShippingAddress" type="submit">Simpan alamat</button>
+          </form>
+          <div class="order-history-list" id="orderHistoryList" aria-live="polite" aria-busy="false"></div>
+        </section>
+      </div>
+    </dialog>
+
+    <dialog class="product-dialog" id="productDialog" aria-labelledby="productDetailName">
+      <div class="product-dialog-inner">
+        <button class="icon-button product-dialog-close" id="closeProductDialog" type="button" aria-label="Tutup detail produk">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
+        <div class="product-detail-visual" id="productDetailVisual">
+          <span class="product-detail-placeholder" aria-hidden="true">✳</span>
+        </div>
+        <section class="product-detail-copy">
+          <p class="eyebrow eyebrow-muted" id="productDetailCategory"></p>
+          <h2 id="productDetailName"></h2>
+          <p class="product-detail-rating" id="productDetailRating"></p>
+          <strong class="product-detail-price" id="productDetailPrice"></strong>
+          <p class="product-detail-stock" id="productDetailStock"></p>
+          <p class="product-detail-description" id="productDetailDescription"></p>
+          <div class="product-detail-actions">
+            <button class="button button-dark" id="productDetailAdd" type="button">Tambah ke keranjang</button>
+            <button class="button button-light" id="productDetailFavorite" type="button" aria-pressed="false">♡ Simpan favorit</button>
+            <button class="product-detail-share" id="productDetailShare" type="button">Bagikan produk</button>
+            <button class="product-detail-reviews" id="productDetailReviews" type="button">Lihat ulasan</button>
+          </div>
+        </section>
+      </div>
+    </dialog>
+
+    <dialog class="checkout-dialog review-dialog" id="reviewDialog" aria-labelledby="reviewProductName">
+      <div class="checkout-dialog-inner">
+        <header class="checkout-dialog-header">
+          <div><p class="eyebrow eyebrow-muted">ULASAN PRODUK</p><h2 id="reviewProductName">Nama produk</h2><small id="reviewSummary">Memuat ulasan...</small></div>
+          <button class="icon-button" id="closeReviewDialog" type="button" aria-label="Tutup ulasan">×</button>
+        </header>
+        <div class="review-list" id="reviewList" aria-live="polite" aria-busy="true"><p class="review-empty">Memuat ulasan...</p></div>
+        <p class="review-login-note" id="reviewLoginNote">Ulasan dapat ditulis setelah pesananmu berstatus selesai. Buka menu Pesanan untuk menulis ulasan.</p>
+        <form id="reviewForm" class="checkout-form" hidden>
+          <input type="hidden" name="productId" />
+          <label>Rating<select name="rating" required><option value="">Pilih rating</option><option value="5">5 — Sangat puas</option><option value="4">4 — Puas</option><option value="3">3 — Cukup</option><option value="2">2 — Kurang puas</option><option value="1">1 — Tidak puas</option></select></label>
+          <label>Ulasan <span class="optional-note">(opsional)</span><textarea name="comment" rows="3" maxlength="1000" placeholder="Ceritakan pengalamanmu dengan produk ini"></textarea></label>
+          <p class="checkout-message" id="reviewMessage" role="alert" hidden></p>
+          <button class="button button-dark checkout-submit" type="submit">Simpan ulasan</button>
+        </form>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
