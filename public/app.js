@@ -15,6 +15,8 @@
   const catalogProductsPerPage = 8;
   const customerOrdersRequestTimeoutMs = 15_000;
   const palettes = ['palette-sage', 'palette-peach', 'palette-blue', 'palette-lilac', 'palette-yellow', 'palette-rose'];
+  const reviewSaveTimers = new Map();
+  const reviewSaveRequests = new Map();
 
   const elements = {
     searchForm: document.querySelector('#searchForm'),
@@ -3712,5 +3714,106 @@
 
   initializeCustomerEnhancements();
 
-  
+  function scheduleReviewSave({
+  productId,
+  rating,
+  comment,
+  token,
+  endpoint,
+  statusElement,
+}) {
+  const key = String(productId);
+
+  // Batalkan timer sebelumnya agar tidak menyimpan setiap karakter.
+  clearTimeout(reviewSaveTimers.get(key));
+
+  if (statusElement) {
+    statusElement.textContent = 'Perubahan belum disimpan';
+  }
+
+  reviewSaveTimers.set(
+    key,
+    setTimeout(async () => {
+      // Ambil nilai terbaru setelah pengguna berhenti mengetik.
+      const payload = {
+        rating: Number(rating),
+        comment: comment.trim(),
+      };
+
+      if (!Number.isInteger(payload.rating) ||
+          payload.rating < 1 ||
+          payload.rating > 5) {
+        if (statusElement) {
+          statusElement.textContent = 'Pilih rating 1–5 terlebih dahulu';
+        }
+        return;
+      }
+
+      try {
+        if (statusElement) {
+          statusElement.textContent = 'Menyimpan...';
+        }
+
+        const previousRequest = reviewSaveRequests.get(key);
+        if (previousRequest) {
+          previousRequest.abort();
+        }
+
+        const controller = new AbortController();
+        reviewSaveRequests.set(key, controller);
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          const error = await response.json().catch(() => ({}));
+          throw new Error(
+            error.message || 'Ulasan gagal disimpan.',
+          );
+        }
+
+        if (statusElement) {
+          statusElement.textContent = 'Ulasan tersimpan otomatis';
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+
+        if (statusElement) {
+          statusElement.textContent =
+            error.message || 'Gagal menyimpan ulasan';
+        }
+      }
+    }, 800),
+  );
+}
+
+commentInput.addEventListener('input', () => {
+  scheduleReviewSave({
+    productId,
+    rating: ratingInput.value,
+    comment: commentInput.value,
+    token,
+    endpoint: reviewEndpoint,
+    statusElement: reviewStatus,
+  });
+});
+
+ratingInput.addEventListener('change', () => {
+  scheduleReviewSave({
+    productId,
+    rating: ratingInput.value,
+    comment: commentInput.value,
+    token,
+    endpoint: reviewEndpoint,
+    statusElement: reviewStatus,
+  });
+});
+
 })();

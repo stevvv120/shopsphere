@@ -1,10 +1,11 @@
+
 import {
   BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { OrderStatus } from '@prisma/client';
+import { OrderStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 
@@ -12,10 +13,10 @@ import { CreateReviewDto } from './dto/create-review.dto';
 export class ProductReviewsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAllForAdmin() {
+  async findAllForAdmin() {
     return this.prisma.review.findMany({
       include: {
-        user: { select: { name: true, email: true } },
+        user: { select: { id: true, name: true, email: true } },
         product: { select: { id: true, name: true } },
       },
       orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
@@ -23,11 +24,14 @@ export class ProductReviewsService {
   }
 
   async removeForAdmin(reviewId: number): Promise<void> {
-    this.assertPositiveId(reviewId);
+    this.assertPositiveId(reviewId, 'Review');
+
     try {
-      await this.prisma.review.delete({ where: { id: reviewId } });
+      await this.prisma.review.delete({
+        where: { id: reviewId },
+      });
     } catch (error) {
-      if ((error as { code?: string } | null)?.code === 'P2025') {
+      if (this.isPrismaError(error, 'P2025')) {
         throw new NotFoundException('Review not found.');
       }
       throw error;
@@ -35,17 +39,28 @@ export class ProductReviewsService {
   }
 
   async findForProduct(productId: number) {
-    this.assertPositiveId(productId);
+    this.assertPositiveId(productId, 'Product');
+
     const product = await this.prisma.product.findUnique({
       where: { id: productId },
       select: { id: true },
     });
-    if (!product) throw new NotFoundException('Product not found.');
+
+    if (!product) {
+      throw new NotFoundException('Product not found.');
+    }
 
     const [reviews, aggregate] = await Promise.all([
       this.prisma.review.findMany({
         where: { productId },
-        include: { user: { select: { name: true } } },
+        select: {
+          id: true,
+          rating: true,
+          comment: true,
+          createdAt: true,
+          updatedAt: true,
+          user: { select: { name: true } },
+        },
         orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       }),
       this.prisma.review.aggregate({
@@ -63,55 +78,124 @@ export class ProductReviewsService {
     };
   }
 
-  async createOrUpdate(userId: number, productId: number, dto: CreateReviewDto) {
-    this.assertPositiveId(productId);
+  async createOrUpdate(
+    userId: number,
+    productId: number,
+    dto: CreateReviewDto,
+  ) {
+    this.assertPositiveId(userId, 'User');
+    this.assertPositiveId(productId, 'Product');
+    this.validateRating(dto.rating);
+
     const product = await this.prisma.product.findUnique({
       where: { id: productId },
       select: { id: true },
     });
-    if (!product) throw new NotFoundException('Product not found.');
 
+    if (!product) {
+      throw new NotFoundException('Product not found.');
+    }
+
+    // Hanya pembeli yang memiliki pesanan berstatus DELIVERED
+    // untuk produk ini yang boleh memberikan ulasan.
     const deliveredPurchase = await this.prisma.orderItem.findFirst({
       where: {
         productId,
-        order: { userId, status: OrderStatus.DELIVERED },
+        order: {
+          userId,
+          status: OrderStatus.DELIVERED,
+        },
       },
       select: { id: true },
     });
+
     if (!deliveredPurchase) {
-      throw new ForbiddenException('You can review a product after its order is delivered.');
+      throw new ForbiddenException(
+        'You can review this product only after your order has been delivered.',
+      );
     }
+
+    const comment = this.normalizeComment(dto.comment);
 
     try {
       return await this.prisma.review.upsert({
-        where: { userId_productId: { userId, productId } },
+        where: {
+          userId_productId: { userId, productId },
+        },
         create: {
           userId,
           productId,
           rating: dto.rating,
-          comment: this.normalizeComment(dto.comment),
+          comment,
         },
         update: {
           rating: dto.rating,
-          comment: this.normalizeComment(dto.comment),
+          comment,
         },
-        include: { user: { select: { name: true } } },
+        select: {
+          id: true,
+          productId: true,
+          rating: true,
+          comment: true,
+          createdAt: true,
+          updatedAt: true,
+          user: { select: { name: true } },
+        },
       });
     } catch (error) {
-      if ((error as { code?: string } | null)?.code === 'P2003') {
-        throw new NotFoundException('Product not found.');
+      if (this.isPrismaError(error, 'P2003')) {
+        throw new NotFoundException(
+          'User or product was not found.',
+        );
       }
       throw error;
     }
   }
 
-  private assertPositiveId(id: number) {
-    if (!Number.isSafeInteger(id) || id < 1) {
-      throw new BadRequestException('Product id must be a positive integer.');
+  private validateRating(rating: number): void {
+    if (
+      !Number.isInteger(rating) ||
+      rating < 1 ||
+      rating > 5
+    ) {
+      throw new BadRequestException(
+        'Rating must be an integer between 1 and 5.',
+      );
     }
   }
 
-  private normalizeComment(comment: string | null | undefined): string | null {
-    return comment?.trim() || null;
+  private assertPositiveId(
+    id: number,
+    entity: string,
+  ): void {
+    if (!Number.isSafeInteger(id) || id < 1) {
+      throw new BadRequestException(
+        `${entity} id must be a positive integer.`,
+      );
+    }
+  }
+
+  private normalizeComment(
+    comment: string | null | undefined,
+  ): string | null {
+    const normalized = comment?.trim() || null;
+
+    if (normalized && normalized.length > 2000) {
+      throw new BadRequestException(
+        'Review comment cannot exceed 2000 characters.',
+      );
+    }
+
+    return normalized;
+  }
+
+  private isPrismaError(
+    error: unknown,
+    code: string,
+  ): error is Prisma.PrismaClientKnownRequestError {
+    return (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === code
+    );
   }
 }
